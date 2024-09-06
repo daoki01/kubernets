@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpd-ingress
+  namespace: teste 
+spec:
+  tls:
+    - hosts:
+      - httpd.com
+      # This assumes tls-secret exists and the SSL
+      # certificate contains a CN for foo.bar.com
+      secretName: secret-httpd
+  ingressClassName: nginx
+  rules:
+    - host: httpd.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp-services
+                port:
+                  number: 80
